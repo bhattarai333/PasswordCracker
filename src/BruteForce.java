@@ -1,5 +1,6 @@
-import java.util.Arrays;
+
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class BruteForce {
     public static void main(String[] args) {
@@ -9,25 +10,25 @@ public class BruteForce {
         bruteForce(password.length(),password);
     }
 
-    public static String bruteForce(int size,String pass) {
+    private static String bruteForce(int size,String pass) {
         int[] password = new int[size];
-        String[] finalPassword = new String[size];
+        AtomicReferenceArray<String> finalPassword = new AtomicReferenceArray<>(new String[size]);
         for (int i = 0; i < size; i++) {
             password[i] = 0;
-            finalPassword[i] = "";
+            finalPassword.set(i, "");
         }
         return computePermutations(size, password, 0, pass);
     }
 
     private static String computePermutations(int size, int[] password, int position, String pass) {
-        String testString = "";
+        String testString;
         String assemble = "";
         for (int i = 0; i < 36; i++) {
             password[position] = i;
 
             if (position != size - 1) {
                 testString = computePermutations(size, password, position + 1, pass);
-                if (testString != "") {
+                if (!testString.equals("")) {
                     return testString;
                 }
             } else if (position == size - 1) {
